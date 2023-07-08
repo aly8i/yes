@@ -7,14 +7,14 @@ import Useredit from '../UserEdit/Useredit'
 import Useradd from '../UserAdd/Useradd'
 import Usercredit from '../UserCredit/Usercredit'
 import { useSession } from "next-auth/react";
-const Dashboard = () => {
+const InternetDashboard = () => {
     const { detailview } = useContext(UserContext);
     const { data,status } = useSession();
     if (status === "loading") {
         return <div>Loading...</div>;
       }
     
-      if (!data?.session?.user || data?.session?.user?.role !== "admin") {
+      if (!data?.session?.user || data?.session?.user?.role !== "internet") {
         return <div>You are not authorized to access this page.</div>;
       }
   return (
@@ -46,4 +46,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default InternetDashboard

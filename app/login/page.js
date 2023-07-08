@@ -18,10 +18,14 @@ const Login = () => {
       })
   };
   useEffect(()=>{
-    if(data?.session?.user?.role&&data?.session?.user?.role=="admin"){
-      window.location.href=`${process.env.BASE_URL}/dashboard`
-    }else if(data?.session?.user?.role&&data?.session?.user?.role=="client"){
-      window.location.href=`${process.env.BASE_URL}/user/${data?.session?.user?.id}`
+    if(data?.session?.user?.role){
+      if(data?.session?.user?.role=="internet")
+        window.location.href=`${process.env.BASE_URL}/internet`
+      else if(data?.session?.user?.role=="satelite"){
+        window.location.href=`${process.env.BASE_URL}/satelite`
+      }else if(data?.session?.user?.role=="client"){
+        window.location.href=`${process.env.BASE_URL}/user/${data?.session?.user?.id}`
+      }
     }
   },[data?.session?.user?.role])
   if(status=="loading"){

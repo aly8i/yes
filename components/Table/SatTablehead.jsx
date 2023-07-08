@@ -2,10 +2,10 @@ import React,{useState} from 'react'
 import Search from '../Search/Search'
 import './Tablehead.module.scss'
 
-const Tablehead = ({setFilteredvalue,filteredvalue,searchedvalue,setSearchedvalue,togglePage,page,pagestotal}) => {
+const SatTablehead = ({setFilteredvalue,filteredvalue,searchedvalue,setSearchedvalue,togglePage,page,pagestotal}) => {
  
     const [showptions,setShowoptions] = useState(false);
-    const boxes = JSON.parse(process.env.INT_BOXES_ARR || '[]');
+    const boxes = JSON.parse(process.env.SAT_BOXES_ARR || '[]');
     return (
     <div class="flex w-full items-center mb-7">
         <button class="inline-flex mr-3 items-center h-8 pl-2.5 pr-2 rounded-md shadow text-gray-400 border-gray-800 border 0 leading-none py-0">
@@ -65,4 +65,4 @@ const Tablehead = ({setFilteredvalue,filteredvalue,searchedvalue,setSearchedvalu
   )
 }
 
-export default Tablehead
+export default SatTablehead

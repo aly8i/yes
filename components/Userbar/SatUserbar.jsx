@@ -17,9 +17,9 @@ const Userbar = () => {
       if (userSnap.exists()) {
         userr = userSnap.data();
       }
-      if(userr?.service&&userr?.service?.includes("satelite")){
+      if(userr?.service&&userr?.service?.includes("internet")){
         const data = {
-          service:["satelite"]
+          service:["internet"]
         }
         await updateDoc(docRef, data);
       }else{
@@ -27,7 +27,7 @@ const Userbar = () => {
       }
       toast.success("User deleted succefully");
     } catch (error) {
-      toast.error("Error deleting user"+error);
+      toast.error("Error deleting user");
     }
   }
   
@@ -73,11 +73,11 @@ const Userbar = () => {
       <div class="sm:flex hidden w-full items-center justif-center ml-auto">
         <div class="text-center s3">
             <div class="text-xs text-gray-400">Box</div>
-            <div class=" text-lg text-gray-400">{user?.intbox||"~"}</div>
+            <div class=" text-lg text-gray-400">{user?.satbox||"~"}</div>
         </div>
         <div class="text-center s3">
             <div class="text-xs text-gray-400">Credit</div>
-            <div class={`text-lg ${user?.intcredit>0?`text-green-500`:`text-red-500`}`}>{user?.intcredit?formatMoney(user?.intcredit):"~"}</div>
+            <div class={`text-lg ${user?.satcredit>0?`text-green-500`:`text-red-500`}`}>{user?.satcredit?formatMoney(user?.satcredit):"~"}</div>
         </div>
       </div>
     </div>

@@ -32,7 +32,7 @@ const Useredit = () => {
       }
 
       const data = {
-        intcredit: increment(amt),
+        satcredit: increment(amt),
         lastseen: dateObj
       }
       await updateDoc(docRef, data);

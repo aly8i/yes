@@ -2,19 +2,19 @@ import React, { useContext, useState } from 'react'
 import "./Useredit.css"
 import { UserContext } from '../../context/Usercontext'
 import {db} from "../../Firebase";
-import { collection,doc,updateDoc,deleteDoc,getDoc} from 'firebase/firestore';
-import Dropdown from '../Dropdown/Dropdown';
+import { collection,doc,updateDoc,deleteDoc} from 'firebase/firestore';
+import SatDropdown from '../Dropdown/SatDropdown';
 import { toast } from 'react-toastify';
-const Useredit = () => {
+const SatUseredit = () => {
   const {user,setDetailview} = useContext(UserContext);
   const [buttonoptions,setButtonoptions] = useState(false);
   const [username,setUsername] = useState(user?.username);
   const [phonenumber,setPhonenumber] = useState(user?.phonenumber);
   const [password,setPassword] = useState(user?.password);
-  const [intbox,setIntbox] = useState(user?.intbox);
+  const [satbox,setSatbox] = useState(user?.satbox);
 
   async function updateUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""){
+    if(username==""||phonenumber==""||password==""||satbox==""){
         toast.warning("Please fill out all the details");
         return
       }
@@ -25,7 +25,7 @@ const Useredit = () => {
         username,
         phonenumber,
         password,
-        intbox
+        satbox
       }
       await updateDoc(docRef, data);
       toast.success("User updated succefully");
@@ -40,9 +40,9 @@ const Useredit = () => {
       const docRef = doc(usersRef,`${user?.id}`);
       const userSnap = getDoc(docRef);
       const user = userSnap.data();
-      if(user?.service&&user?.service?.includes("satelite")){
+      if(user?.service&&user?.service?.includes("internet")){
         const data = {
-          service:["satelite"]
+          service:["internet"]
         }
         await updateDoc(docRef, data);
       }else{
@@ -93,7 +93,7 @@ const Useredit = () => {
           <input onChange={(e)=>{setPassword(e.target.value)}} value={password}class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
-      <Dropdown setIntbox={setIntbox} intbox={intbox}/>
+      <SatDropdown setSatbox={setSatbox} satbox={satbox}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await updateUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save
@@ -103,4 +103,4 @@ const Useredit = () => {
   )
 }
 
-export default Useredit
+export default SatUseredit

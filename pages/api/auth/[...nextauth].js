@@ -4,10 +4,12 @@ import {db} from "../../../Firebase";
 import { collection,query,where,getDocs } from 'firebase/firestore';
 var username = "";
 var role = "";
-// var phonenumber = "";
-var box = "";
+var satbox = "";
+var intbox = "";
 var id = "";
-var credit = 0;
+var intcredit = 0;
+var satcredit = 0;
+var service = [];
 export default NextAuth({
   session: {
     strategy: "jwt",
@@ -30,8 +32,11 @@ export default NextAuth({
           id = querySnapshot.docs[0].id;
           username = user.username;
           role = user.role;
-          box = user.box;
-          credit = user.credit;
+          service = user.service;
+          intbox = user.int;
+          satbox = user.satbox;
+          intcredit = user.intcredit;
+          satcredit = user.satcredit;
           return user; 
         } catch (error) {
           console.log("Error:", error);
@@ -47,9 +52,12 @@ export default NextAuth({
     async session(session, user) {
       session.session.user.username = username;
       session.session.user.role = role;
-      session.session.user.box = box;
+      session.session.user.satbox = satbox;
+      session.session.user.intbox = intbox;
       session.session.user.id = id;
-      session.session.user.credit = credit;
+      session.session.user.service = service;
+      session.session.user.satcredit = satcredit;
+      session.session.user.intcredit = intcredit;
       return session;
     },
   },

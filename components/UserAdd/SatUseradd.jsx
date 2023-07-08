@@ -1,60 +1,60 @@
 import React, { useContext, useState } from 'react'
-import "./Useredit.css"
+import "./Useradd.css"
 import { UserContext } from '../../context/Usercontext'
 import {db} from "../../Firebase";
-import { collection,doc,updateDoc,deleteDoc,getDoc} from 'firebase/firestore';
-import Dropdown from '../Dropdown/Dropdown';
+import { collection,addDoc,doc,updateDoc} from 'firebase/firestore';
 import { toast } from 'react-toastify';
-const Useredit = () => {
+import SatDropdown from '../Dropdown/SatDropdown';
+import {fetchSatUsers} from '../../hooks/FirebaseHook';
+const Useradd = () => {
   const {user,setDetailview} = useContext(UserContext);
   const [buttonoptions,setButtonoptions] = useState(false);
-  const [username,setUsername] = useState(user?.username);
-  const [phonenumber,setPhonenumber] = useState(user?.phonenumber);
-  const [password,setPassword] = useState(user?.password);
-  const [intbox,setIntbox] = useState(user?.intbox);
+  const [username,setUsername] = useState("");
+  const [phonenumber,setPhonenumber] = useState("");
+  const [password,setPassword] = useState("");
+  const [satbox,setSatbox] = useState("");
+  const { initialusers } = useContext(UserContext);
 
-  async function updateUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""){
-        toast.warning("Please fill out all the details");
-        return
-      }
-    try {
-      const usersRef = collection(db,'users');
-      const docRef = doc(usersRef, `${user?.id}`);
-      const data = {
-        username,
-        phonenumber,
-        password,
-        intbox
-      }
-      await updateDoc(docRef, data);
-      toast.success("User updated succefully");
-    } catch (error) {
-      toast.error("Error updating user");
+  fetchSatUsers();
+
+ async function addUser() {
+    if(username==""||phonenumber==""||password==""||satbox==""){
+      toast.warning("Please fill out all the details");
+      return
     }
-  }
-  
-  async function deleteUser() {
     try {
       const usersRef = collection(db,'users');
-      const docRef = doc(usersRef,`${user?.id}`);
-      const userSnap = getDoc(docRef);
-      const user = userSnap.data();
-      if(user?.service&&user?.service?.includes("satelite")){
+      const exists = initialusers.filter((usr)=>usr.phonenumber==phonenumber);
+      if(exists.length>0){
         const data = {
-          service:["satelite"]
+          username:exists[0]?.username,
+          phonenumber,
+          password:exists[0]?.password,
+          satbox:exists[0]?.satbox,
+          service:["internet","satelite"],
+          role:"client"
         }
+        const docRef =doc(usersRef, exists[0]?.id);
         await updateDoc(docRef, data);
       }else{
-        await deleteDoc(docRef);
+        const data = {
+          username,
+          phonenumber,
+          password,
+          satbox,
+          service:["satelite"],
+          role:"client"
+        }
+        await addDoc(usersRef, data);
       }
-      toast.success("User deleted succefully");
+      toast.success("User added succefully");
+      
     } catch (error) {
-      toast.error("Error deleting user");
+      toast.error("Error adding the user");
     }
   }
-  
 
+  
   return (
     <div class="flex-col items-center border-r flex-grow s2">
       <button onMouseEnter={()=>{setButtonoptions(true)}} onClick={()=>{setButtonoptions(!buttonoptions)}} class="s4 w-8 h-8 ml-4  shadow text-gray-400 rounded-full flex items-center justify-center border  border-gray-700">
@@ -66,14 +66,12 @@ const Useredit = () => {
       </button>
       {buttonoptions&&
         <div onMouseLeave={()=>setButtonoptions(false)}class="text-center cursor-pointer shadow text-gray-400 message parker border border-gray-700">
-          <div onClick={()=>setDetailview("userview")} class="option edit border-b border-gray-700 ml-auto">view</div>
-          <div onClick={()=>setDetailview("useradd")} class="option add border-b border-gray-700 ml-auto">add</div>
-          <div onClick={async()=>await deleteUser()} class="option delete ml-auto">delete</div>
+          <div onClick={()=>setDetailview("userview")} class="option border-gray-700 ml-auto">view</div>
         </div>
-      }
+      } 
       <div class="flex flex-col ml-auto mt-2 mb-2 items-center w-full text-3xl text-gray-400">
-        <div class="mb-2">{user?.username||"~"}</div>
-        <img src={`https://robohash.org/${user?.username}`} class="s44 mr-4 rounded-full" alt="profile" />
+        <div class="mb-2">New User</div>
+        <img src={`https://robohash.org/${username?username:"1"}`} class="s44 mr-4 rounded-full" alt="profile" />
       </div>
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
@@ -93,9 +91,9 @@ const Useredit = () => {
           <input onChange={(e)=>{setPassword(e.target.value)}} value={password}class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
-      <Dropdown setIntbox={setIntbox} intbox={intbox}/>
+      <SatDropdown satbox={satbox} setSatbox={setSatbox}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
-        <div style={{borderRadius:"1.125rem"}} onClick={async()=>await updateUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
+        <div style={{borderRadius:"1.125rem"}} onClick={async()=>await addUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save
         </div>
       </div>
@@ -103,4 +101,4 @@ const Useredit = () => {
   )
 }
 
-export default Useredit
+export default Useradd

@@ -1,9 +1,9 @@
-import TableData from './TableData'
-import Tablehead from './Tablehead'
+import SatTableData from './SatTableData'
+import SatTablehead from './SatTablehead'
 import Tablenav from "./Tablenav"
 import React, { useState,useContext,useEffect,useRef } from 'react'
 import { UserContext } from '../../context/Usercontext';
-import {fetchUsers} from '../../hooks/FirebaseHook';
+import {fetchSatUsers} from '../../hooks/FirebaseHook';
 
 const Table = () => {
     const [page, setpage] = useState(1);
@@ -16,7 +16,7 @@ const Table = () => {
     const [searchedvalue, setSearchedvalue] = useState("");
     const [filteredvalue, setFilteredvalue] = useState("");
     const pagestotal = useRef(0);
-    fetchUsers();
+    fetchSatUsers();
   
     useEffect(() => {
         const calculateUsersPerPage = () => {
@@ -32,7 +32,7 @@ const Table = () => {
       }, []);
 
       useEffect(()=>{
-        const temp = initialusers.filter((usr)=>usr.username?.includes(searchedvalue)&&usr.intbox?.includes(filteredvalue));
+        const temp = initialusers.filter((usr)=>usr.username?.includes(searchedvalue)&&usr.satbox?.includes(filteredvalue));
         setUsers(temp);
       },[searchedvalue,initialusers,filteredvalue]);
 
@@ -62,6 +62,7 @@ const Table = () => {
             }
             
           }else if(page<numofpages){
+            console.log("ops4")
             setpage(page+1);
             setStartindex(startindex+usersPerPageFix)
             setFinishindex(finishindex+usersPerPageFix)
@@ -91,8 +92,8 @@ const Table = () => {
             <Tablenav/>
         </div>
         <div class="sm:p-7 p-4 overflow-hidden">
-            <Tablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/>
-            <TableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} />
+            <SatTablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/>
+            <SatTableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} />
         </div>
     </>
   )

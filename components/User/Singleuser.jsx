@@ -44,10 +44,13 @@ export default function UserPage({userId}) {
             <div className={styles.info}>{user.phonenumber}</div>
         </div>
         <div className={styles.section}>
-            <div className={styles.stitle}>Credit</div>
-            <div style={user.credit>0?{color:"red"}:{color:"green"}}className={styles.info}>{formatMoney(user.credit)}</div>
+            <div className={styles.stitle}>Satelite Credit</div>
+            <div style={user.satcredit>0?{color:"red"}:{color:"green"}}className={styles.info}>{formatMoney(-1*user.satcredit)}</div>
         </div>
-     
+        <div className={styles.section}>
+            <div className={styles.stitle}>Internet Credit</div>
+            <div style={user.intcredit>0?{color:"red"}:{color:"green"}}className={styles.info}>{formatMoney(-1*user.intcredit)}</div>
+        </div>
     </div>
   );
 }

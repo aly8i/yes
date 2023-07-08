@@ -2,33 +2,53 @@ import React, { useContext, useState } from 'react'
 import "./Useradd.css"
 import { UserContext } from '../../context/Usercontext'
 import {db} from "../../Firebase";
-import { collection,addDoc} from 'firebase/firestore';
+import { collection,addDoc,updateDoc,doc} from 'firebase/firestore';
 import { toast } from 'react-toastify';
-import Dropdown from '../Dropdown.jsx/Dropdown';
+import Dropdown from '../Dropdown/Dropdown';
+import {fetchUsers} from '../../hooks/FirebaseHook';
 const Useradd = () => {
   const {user,setDetailview} = useContext(UserContext);
   const [buttonoptions,setButtonoptions] = useState(false);
   const [username,setUsername] = useState("");
   const [phonenumber,setPhonenumber] = useState("");
   const [password,setPassword] = useState("");
-  const [box,setBox] = useState("");
+  const [intbox,setIntbox] = useState("");
+  const { initialusers } = useContext(UserContext);
+
+  fetchUsers();
 
   async function addUser() {
-    if(username==""||phonenumber==""||password==""||box==""){
+    if(username==""||phonenumber==""||password==""||intbox==""){
       toast.warning("Please fill out all the details");
       return
     }
     try {
       const usersRef = collection(db,'users');
-      const data = {
-        username,
-        phonenumber,
-        password,
-        box,
-        role:"client"
+      const exists = initialusers.filter((usr)=>usr.phonenumber==phonenumber);
+      if(exists.length>0){
+        const data = {
+          username: exists[0].username,
+          phonenumber: phonenumber,
+          password:exists[0].password,
+          intbox:exists[0].intbox,
+          service:["internet","satelite"],
+          role:"client"
+        }
+        const docRef = doc(usersRef, `${exists[0]?.id}`);
+        await updateDoc(docRef, data);
+      }else{
+        const data = {
+          username,
+          phonenumber,
+          password,
+          intbox,
+          service:["internet"],
+          role:"client"
+        }
+        await addDoc(usersRef, data);
       }
-      await addDoc(usersRef, data);
       toast.success("User added succefully");
+
     } catch (error) {
       toast.error("Error adding the user");
     }
@@ -50,8 +70,8 @@ const Useradd = () => {
         </div>
       } 
       <div class="flex flex-col ml-auto mt-2 mb-2 items-center w-full text-3xl text-gray-400">
-        <div class="mb-2">{user?.username||"~"}</div>
-        <img src={`https://robohash.org/${user?.username}`} class="s44 mr-4 rounded-full" alt="profile" />
+        <div class="mb-2">New User</div>
+        <img src={`https://robohash.org/${username?username:"1"}`} class="s44 mr-4 rounded-full" alt="profile" />
       </div>
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
@@ -71,7 +91,7 @@ const Useradd = () => {
           <input onChange={(e)=>{setPassword(e.target.value)}} value={password}class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
-      <Dropdown box={box} setBox={setBox}/>
+      <Dropdown intbox={intbox} setIntbox={setIntbox}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await addUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save

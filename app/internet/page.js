@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
-import Dashboard from "../../components/Dashboard/Dashboard";
+import InternetDashboard from "../../components/Dashboard/InternetDashboard";
 const Page = () => {
   return (
-    <Dashboard/>
+    <InternetDashboard/>
   );
 };
 
