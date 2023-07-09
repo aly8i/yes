@@ -17,7 +17,7 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     border-radius: 12px;
     width: 400px;
-    height: 600px;
+    height: 650px;
     background-color: white;
 }
 
@@ -45,6 +45,12 @@
     gap:20px;
     background-color: transparent;
     color:gray;
+}
+.section2{
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
 }
 .stitle{
     background-color: transparent;
