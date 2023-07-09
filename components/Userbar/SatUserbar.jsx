@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import "./Userbar.css"
 import {db} from "../../Firebase";
-import { collection,doc,deleteDoc,getDoc,updateDoc } from 'firebase/firestore';
+import { collection,doc,deleteDoc,getDoc,updateDoc,deleteField  } from 'firebase/firestore';
 import { UserContext } from '../../context/Usercontext'
 import { formatDate,formatMoney } from '../../utils/functions'
 import { toast } from 'react-toastify';
@@ -19,7 +19,11 @@ const Userbar = () => {
       }
       if(userr?.service&&userr?.service?.includes("internet")){
         const data = {
-          service:["internet"]
+          service:["internet"],
+          satcredit: deleteField() ,
+          satchargeamount: deleteField(),
+          satbox: deleteField(),
+          satchargeday: deleteField()
         }
         await updateDoc(docRef, data);
       }else{
@@ -62,6 +66,19 @@ const Userbar = () => {
         <div class="text-center s3">
             <div class="text-xs text-gray-400">Phonenumber</div>
             <div class=" text-lg text-gray-400">{user?.phonenumber||"~"}</div>
+        </div>
+      </div>
+
+      <div class="sm:flex hidden w-full items-center justif-center ml-auto">
+        <div class="text-center s3">
+            <div class="text-xs text-gray-400">Day of Charge</div>
+            <div class=" text-lg text-gray-400">{user?.satchargeday?user?.satchargeday:"~"}</div>
+        </div>
+      </div>
+      <div class="sm:flex hidden w-full items-center justif-center ml-auto">
+        <div class="text-center s3">
+            <div class="text-xs text-gray-400">Charge Amount</div>
+            <div class=" text-lg text-gray-400">{user?.satchargeamount?user.satchargeamount:"~"}</div>
         </div>
       </div>
       <div class="sm:flex hidden w-full items-center justif-center ml-auto">

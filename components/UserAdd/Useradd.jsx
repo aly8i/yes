@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import "./Useradd.css"
 import { UserContext } from '../../context/Usercontext'
 import {db} from "../../Firebase";
-import { collection,addDoc,updateDoc,doc} from 'firebase/firestore';
+import { collection,addDoc,doc,updateDoc,getDocs,query,where} from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import Dropdown from '../Dropdown/Dropdown';
 import {fetchUsers} from '../../hooks/FirebaseHook';
@@ -13,28 +13,36 @@ const Useradd = () => {
   const [phonenumber,setPhonenumber] = useState("");
   const [password,setPassword] = useState("");
   const [intbox,setIntbox] = useState("");
-  const { initialusers } = useContext(UserContext);
+  const [intchargeday,setIntchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])||1);
+  const [intchargeamount,setIntchargeamount] = useState(process.env.INT_CHARGE||0);
 
   fetchUsers();
 
   async function addUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""){
+    if(username==""||phonenumber==""||password==""||intbox==""|| intchargeamount==0){
       toast.warning("Please fill out all the details");
       return
     }
     try {
       const usersRef = collection(db,'users');
-      const exists = initialusers.filter((usr)=>usr.phonenumber==phonenumber);
-      if(exists.length>0){
+      const usersQuery = query(usersRef, where('phonenumber', '==', phonenumber));
+      const querySnapshot = await getDocs(usersQuery);
+      var found={};
+      if (!querySnapshot.empty) {
+        const doc = querySnapshot.docs[0];
+        const id = doc.id;
+        const data = doc.data();
+        found = { id, ...data };
+      }
+      if(found!={}){
         const data = {
-          username: exists[0].username,
-          phonenumber: phonenumber,
-          password:exists[0].password,
-          intbox:exists[0].intbox,
+          intchargeamount,
+          intchargeday,
+          intbox,
           service:["internet","satelite"],
           role:"client"
         }
-        const docRef = doc(usersRef, `${exists[0]?.id}`);
+        const docRef = doc(usersRef, found?.id);
         await updateDoc(docRef, data);
       }else{
         const data = {
@@ -42,6 +50,8 @@ const Useradd = () => {
           phonenumber,
           password,
           intbox,
+          intchargeday,
+          intchargeamount,
           service:["internet"],
           role:"client"
         }
@@ -89,6 +99,18 @@ const Useradd = () => {
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Password</div>
           <input onChange={(e)=>{setPassword(e.target.value)}} value={password}class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+        </div>
+      </div>
+      <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
+        <div class="text-center s3">
+          <div class="text-xs text-gray-400">Day of Charge</div>
+          <input type="number" min="1" max="28" onChange={(e)=>{setIntchargeday(e.target.value)}} value={intchargeday} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+        </div>
+      </div>
+      <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
+        <div class="text-center s3">
+          <div class="text-xs text-gray-400">Charge Amount</div>
+          <input type="number"  onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <Dropdown intbox={intbox} setIntbox={setIntbox}/>

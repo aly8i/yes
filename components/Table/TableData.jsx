@@ -14,6 +14,7 @@ const TableData = ({users,finishindex,startindex,selectUser,setDetailview}) => {
                 <th class="font-normal px-3 pt-0 pb-3 border-b border-gray-800">phonenumber</th>
                 <th class="font-normal px-3 pt-0 pb-3 border-b border-gray-800 hidden md:table-cell">Box</th>
                 <th class="font-normal px-3 pt-0 pb-3 border-b border-gray-800">Credit</th>
+                <th class="font-normal px-3 pt-0 pb-3 border-b border-gray-800 sm:text-gray-400 text-gray-400">Day of Charge</th>
                 <th class="font-normal px-3 pt-0 pb-3 border-b border-gray-800 sm:text-gray-400 text-gray-400">Last Seen</th>
               </tr>
             </thead>
@@ -33,6 +34,7 @@ const TableData = ({users,finishindex,startindex,selectUser,setDetailview}) => {
                     </td>
                     <td class="sm:p-3 py-2 px-1 border-b border-gray-800 md:table-cell hidden">{user?.intbox}</td>
                     <td class={`sm:p-3 py-2 px-1 border-b border-gray-800 ${user?.intcredit>0?`text-green-500`:`text-red-500`}`}> {user?.intcredit?formatMoney(user?.intcredit):"~"}</td>
+                    <td class="sm:p-3 py-2 px-1 border-b border-gray-800" > {user?.intchargeday}</td>
                     <td class="sm:p-3 py-2 px-1 border-b border-gray-800">
                       <div class="flex items-center">
                         <div class="sm:flex hidden flex-col">

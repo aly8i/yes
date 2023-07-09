@@ -16,7 +16,7 @@ const Export = () => {
               const usersData = snapshot.docs.map((doc) => {
                 const id = doc.id;
                 const data = doc.data();
-                return { id, username:data.username , phonenumber:data.phonenumber,box:data.satbox,credit:data.satcredit};
+                return { id, username:data.username , phonenumber:data.phonenumber,box:data.satbox,credit:data.satcredit,dayofcharge:data.satchargeday};
               })
               setUsers([...usersData]);
             }
@@ -46,7 +46,7 @@ const Export = () => {
               const usersData = snapshot.docs.map((doc) => {
                 const id = doc.id;
                 const data = doc.data();
-                return { id, username:data.username , phonenumber:data.phonenumber,box:data.intbox,credit:data.intcredit};
+                return { id, username:data.username , phonenumber:data.phonenumber,box:data.intbox,credit:data.intcredit,dayofcharge:data.satchargeday};
               })
               setUsers([...usersData]);
             }

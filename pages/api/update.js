@@ -2,29 +2,36 @@ import { db } from '../../Firebase'; // Import your Firebase configuration
 import { collection,where,query,getDocs,updateDoc } from 'firebase/firestore';
 export default async function handler(req, res) {
   if (req.method === 'GET') {
+    const apiKey = req.headers.authorization;
+    if (apiKey !== `${process.env.CRON_KEY}`) {
+      return res.status(401).json({ error: 'Invalid API key' });
+    }
     try {
       const date = new Date().toISOString().split('T')[0].split("-");
-      const day = date[2];
-      const month = date[1];
-      const year = date[0];
-      console.log(day,month,year);
-       // Get the current date in YYYY-MM-DD format
+      const day = parseInt(date[2]);
       const usersRef = collection(db, 'users');
-      const usersQuery = query(usersRef, where('role', '==', "client"));
-      const usersSnapshot = await getDocs(usersQuery);
+      const usersQuery1 = query(usersRef, where('role', '==', "client"),where('satchargeday', '==', day),where('service',"array-contains",'satelite'));
+      const usersQuery2 = query(usersRef, where('role', '==', "client"),where('intchargeday', '==', day),where('service',"array-contains",'internet'));
+      const usersSnapshot1 = await getDocs(usersQuery1);
+      const usersSnapshot2 = await getDocs(usersQuery2);
+      var promises = [];
 
-        var promises = [];
-
-      usersSnapshot.forEach((doc) => {
+      usersSnapshot1.forEach((doc) => {
         const userRef = doc.ref;
-        const newCredit = doc.data().satcredit + 100;
+        const newCredit = doc.data().satcredit + doc.data().satchargeamount ;
         const promise = updateDoc(userRef, { satcredit: newCredit });
+        promises.push(promise);
+      });
+      usersSnapshot2.forEach((doc) => {
+        const userRef = doc.ref;
+        const newCredit = doc.data().intcredit + doc.data().intchargeamount;
+        const promise = updateDoc(userRef, { intcredit: newCredit });
         promises.push(promise);
       });
 
       await Promise.all(promises);
 
-      res.status(200).json({ message: 'Credit increased for eligible users.' });
+      res.status(200).json({ message: 'Update executed !' });
     } catch (error) {
       console.error('Error increasing credit:', error);
       res.status(500).json({ error: 'Error increasing credit.' });

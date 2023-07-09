@@ -16,7 +16,11 @@ const nextConfig = {
     FIREBASE_APPID: "1:241145331033:web:5372e8dd623b61d5736048",
     FIREBASE_MEASURMENTID: "G-FXN5BVG0LX",
     SAT_BOXES_ARR: '["hfc", "baraket", "melhem"]',
-    INT_BOXES_ARR: '["hfc", "nejem", "farah"]'
+    INT_BOXES_ARR: '["hfc", "nejem", "farah"]',
+    CRON_KEY: 'Bearer cron-job-auth-token-123-poi',
+    SAT_CHARGE: 100,
+    INT_CHARGE:100
+
   },
 };
 

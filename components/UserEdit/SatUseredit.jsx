@@ -12,9 +12,11 @@ const SatUseredit = () => {
   const [phonenumber,setPhonenumber] = useState(user?.phonenumber);
   const [password,setPassword] = useState(user?.password);
   const [satbox,setSatbox] = useState(user?.satbox);
+  const [satchargeday,setSatchargeday] = useState(user?.satchargeday||0);
+  const [satchargeamount,setSatchargeamount] = useState(user?.satchargeamount||0);
 
   async function updateUser() {
-    if(username==""||phonenumber==""||password==""||satbox==""){
+    if(username==""||phonenumber==""||password==""||satbox==""||satchargeday==""||satchargeamount==0){
         toast.warning("Please fill out all the details");
         return
       }
@@ -25,7 +27,9 @@ const SatUseredit = () => {
         username,
         phonenumber,
         password,
-        satbox
+        satbox,
+        satchargeday,
+        satchargeamount
       }
       await updateDoc(docRef, data);
       toast.success("User updated succefully");
@@ -91,6 +95,18 @@ const SatUseredit = () => {
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Password</div>
           <input onChange={(e)=>{setPassword(e.target.value)}} value={password}class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+        </div>
+      </div>
+      <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
+        <div class="text-center s3">
+          <div class="text-xs text-gray-400">Day of Charge</div>
+          <input type="number" onChange={(e)=>{setSatchargeday(e.target.value)}} value={satchargeday} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+        </div>
+      </div>
+      <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
+        <div class="text-center s3">
+          <div class="text-xs text-gray-400">Charge Amount</div>
+          <input onChange={(e)=>{setSatchargeamount(e.target.value)}} value={satchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <SatDropdown setSatbox={setSatbox} satbox={satbox}/>

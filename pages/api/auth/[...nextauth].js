@@ -6,6 +6,10 @@ var username = "";
 var role = "";
 var satbox = "";
 var intbox = "";
+var satchargeday = 0;
+var intchargeday = 0;
+var intchargeamount = 0;
+var satchargeamount = 0;
 var id = "";
 var intcredit = 0;
 var satcredit = 0;
@@ -37,6 +41,10 @@ export default NextAuth({
           satbox = user.satbox;
           intcredit = user.intcredit;
           satcredit = user.satcredit;
+          intchargeday = user.intchargeday;
+          satchargeday = user.satchargeday;
+          intchargeamount = user.intchargeamount;
+          satchargeamount = user.satchargeamount;
           return user; 
         } catch (error) {
           console.log("Error:", error);
@@ -58,6 +66,10 @@ export default NextAuth({
       session.session.user.service = service;
       session.session.user.satcredit = satcredit;
       session.session.user.intcredit = intcredit;
+      session.session.user.intchargeday = intchargeday;
+      session.session.user.satchargeday = satchargeday;
+      session.session.user.intchargeamount = intchargeamount;
+      session.session.user.satchargeamount = satchargeamount;
       return session;
     },
   },
