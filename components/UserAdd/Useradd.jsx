@@ -5,6 +5,7 @@ import {db} from "../../Firebase";
 import { collection,addDoc,doc,updateDoc,getDocs,query,where} from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import Dropdown from '../Dropdown/Dropdown';
+import WebDropdown from '../Dropdown/WebDropdown';
 import {fetchUsers} from '../../hooks/FirebaseHook';
 const Useradd = () => {
   const {user,setDetailview} = useContext(UserContext);
@@ -15,11 +16,11 @@ const Useradd = () => {
   const [intbox,setIntbox] = useState("");
   const [intchargeday,setIntchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])||1);
   const [intchargeamount,setIntchargeamount] = useState(process.env.INT_CHARGE||0);
-
+  const [intweb,setIntweb] = useState("");
   fetchUsers();
 
   async function addUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""|| intchargeamount==0){
+    if(username==""||phonenumber==""||password==""||intbox==""|| intchargeamount==0||intweb==""){
       toast.warning("Please fill out all the details");
       return
     }
@@ -39,6 +40,7 @@ const Useradd = () => {
           intchargeamount,
           intchargeday,
           intbox,
+          intweb,
           service:["internet","satelite"],
           role:"client"
         }
@@ -50,6 +52,7 @@ const Useradd = () => {
           phonenumber,
           password,
           intbox,
+          intweb,
           intchargeday,
           intchargeamount,
           service:["internet"],
@@ -114,6 +117,7 @@ const Useradd = () => {
         </div>
       </div>
       <Dropdown intbox={intbox} setIntbox={setIntbox}/>
+      <WebDropdown intweb={intweb} setIntweb={setIntweb}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await addUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save

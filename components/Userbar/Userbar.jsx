@@ -8,6 +8,20 @@ import { toast } from 'react-toastify';
 const Userbar = () => {
   const {user,setDetailview} = useContext(UserContext);
   const [buttonoptions,setButtonoptions] = useState(false);
+
+  const getLink = () => {
+    const websites = JSON.parse(process.env.WEB_ARRAY);
+    for (let i = 0; i < websites.length; i++) {
+      if (websites[i].name === user?.intweb) {
+        return websites[i].value;
+      }
+    }
+    return null; // Return null if no matching value is found
+  };
+
+  const weblink = getLink();
+  
+  
   async function deleteUser() {
     try {
       const usersRef = collection(db,'users');
@@ -23,7 +37,8 @@ const Userbar = () => {
           intcredit: deleteField(),
           intbox:deleteField(),
           intchargeamount: deleteField(),
-          intchargeday: deleteField()
+          intchargeday: deleteField(),
+          intweb: deleteField()
         }
         await updateDoc(docRef, data);
       }else{
@@ -79,6 +94,12 @@ const Userbar = () => {
         <div class="text-center s3">
             <div class="text-xs text-gray-400">Charge Amount</div>
             <div class=" text-lg text-gray-400">{user?.intchargeamount?user.intchargeamount:"~"}</div>
+        </div>
+      </div>
+      <div class="sm:flex hidden w-full items-center justif-center ml-auto">
+        <div class="text-center s3">
+            <div class="text-xs text-gray-400">Website</div>
+            <div class=" text-lg text-gray-400"><a href={`${weblink}`} target="_blank">{user?.intweb?user.intweb:"~"}</a></div>
         </div>
       </div>
       <div class="sm:flex hidden w-full items-center justif-center ml-auto">

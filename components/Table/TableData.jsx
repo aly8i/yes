@@ -36,7 +36,7 @@ const TableData = ({users,finishindex,startindex,selectUser,setDetailview}) => {
                     <td class={`sm:p-3 py-2 px-1 border-b border-gray-800 ${user?.intcredit>0?`text-green-500`:`text-red-500`}`}> {user?.intcredit?formatMoney(user?.intcredit):"~"}</td>
                     <td class="sm:p-3 py-2 px-1 border-b border-gray-800" > {user?.intchargeday}</td>
                     <td class="sm:p-3 py-2 px-1 border-b border-gray-800">
-                      <div class="flex items-center">
+                      <div class="flex items-center"> 
                         <div class="sm:flex hidden flex-col">
                         {user?.lastseen?formatDate(user?.lastseen):"~"}
                         </div>

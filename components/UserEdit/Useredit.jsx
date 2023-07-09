@@ -4,6 +4,7 @@ import { UserContext } from '../../context/Usercontext'
 import {db} from "../../Firebase";
 import { collection,doc,updateDoc,deleteDoc,getDoc} from 'firebase/firestore';
 import Dropdown from '../Dropdown/Dropdown';
+import WebDropdown from '../Dropdown/WebDropdown';
 import { toast } from 'react-toastify';
 const Useredit = () => {
   const {user,setDetailview} = useContext(UserContext);
@@ -13,10 +14,11 @@ const Useredit = () => {
   const [password,setPassword] = useState(user?.password);
   const [intbox,setIntbox] = useState(user?.intbox);
   const [intchargeday,setIntchargeday] = useState(user?.intchargeday);
+  const [intweb,setIntweb] = useState(user?.intweb);
   const [intchargeamount,setIntchargeamount] = useState(user?.intchargeamount||0);
 
   async function updateUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""||intchargeday==""||intchargeamount==0){
+    if(username==""||phonenumber==""||password==""||intbox==""||intchargeday==""||intchargeamount==0||intweb==""){
         toast.warning("Please fill out all the details");
         return
       }
@@ -29,6 +31,7 @@ const Useredit = () => {
         password,
         intbox,
         intchargeday,
+        intweb,
         intchargeamount
       }
       await updateDoc(docRef, data);
@@ -110,6 +113,7 @@ const Useredit = () => {
         </div>
       </div>
       <Dropdown setIntbox={setIntbox} intbox={intbox}/>
+      <WebDropdown setIntweb={setIntweb} intweb={intweb}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await updateUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save

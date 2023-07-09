@@ -19,8 +19,8 @@ const nextConfig = {
     INT_BOXES_ARR: '["hfc", "nejem", "farah"]',
     CRON_KEY: 'Bearer cron-job-auth-token-123-poi',
     SAT_CHARGE: 100,
-    INT_CHARGE:100
-
+    INT_CHARGE:100,
+    WEB_ARRAY:'[{"name": "global", "value": "https://www.global.com"},{"name": "patrick", "value": "https://patrick.com"}]'
   },
 };
 

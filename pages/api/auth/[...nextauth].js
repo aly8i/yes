@@ -13,6 +13,7 @@ var satchargeamount = 0;
 var id = "";
 var intcredit = 0;
 var satcredit = 0;
+var intweb = "";
 var service = [];
 export default NextAuth({
   session: {
@@ -42,6 +43,7 @@ export default NextAuth({
           intcredit = user.intcredit;
           satcredit = user.satcredit;
           intchargeday = user.intchargeday;
+          intweb = user.intweb;
           satchargeday = user.satchargeday;
           intchargeamount = user.intchargeamount;
           satchargeamount = user.satchargeamount;
@@ -70,6 +72,7 @@ export default NextAuth({
       session.session.user.satchargeday = satchargeday;
       session.session.user.intchargeamount = intchargeamount;
       session.session.user.satchargeamount = satchargeamount;
+      session.session.user.intweb = intweb;
       return session;
     },
   },
