@@ -19,11 +19,12 @@ const Useredit = () => {
   const boxes = JSON.parse(process.env.INT_BOXES_ARR || '[]');
   const websites = JSON.parse(process.env.WEB_ARRAY || '[]');
   const checkWeb = async() =>{
+    var found = false;
     websites.map((web)=>{
       if(web.name==intweb)
-        return true;
+        found=true;
     })
-    return false;
+    return found;
   }
   async function updateUser() {
     const webvalid = await checkWeb();

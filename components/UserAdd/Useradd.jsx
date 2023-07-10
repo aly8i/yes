@@ -21,11 +21,13 @@ const Useradd = () => {
   const websites = JSON.parse(process.env.WEB_ARRAY || '[]');
   fetchUsers();
   const checkWeb = async() =>{
+    var found = false;
     websites.map((web)=>{
-      if(web.name==intweb)
-        return true;
+      if(web.name==intweb){
+        found=true;
+      }
     })
-    return false;
+    return found;
   }
   async function addUser() {
     const webvalid = await checkWeb();
