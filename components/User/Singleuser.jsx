@@ -9,7 +9,7 @@ import { collection, doc, getDoc } from 'firebase/firestore';
 
 export default function UserPage({userId}) {
   const usersRef = collection(db, 'users');
-  const [user, setUser] = useState({});
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchDocument = async () => {
@@ -33,15 +33,15 @@ export default function UserPage({userId}) {
 
     fetchDocument();
   }, [userId, usersRef]);
-  if(user=={})
+  if(user==null)
     return <h1>loading</h1>
   return (
     <div className={styles.card}>
-        <div className={styles.title}>{user.username}</div>
-     <img className={styles.img} src={`https://robohash.org/${user.username}`}/>
+        <div className={styles.title}>{user?.username}</div>
+     <img className={styles.img} src={`https://robohash.org/${user?.username}`}/>
         <div className={styles.section}>
             <div className={styles.stitle}>Phone Number</div>
-            <div className={styles.info}>{user.phonenumber}</div>
+            <div className={styles.info}>{user?.phonenumber}</div>
         </div>
         <div className={styles.section}>
             <div className={styles.stitle}>Satelite</div>
@@ -49,11 +49,11 @@ export default function UserPage({userId}) {
         <div className={styles.section2}>
           <div className={styles.section}>
             <div className={styles.stitle}>Credit</div>
-            <div style={user.satcredit>0?{color:"red"}:{color:"green"}}className={styles.info}>{formatMoney(-1*user.satcredit)}</div>
+            <div style={user?.satcredit>0?{color:"red"}:{color:"green"}}className={styles.info}>{formatMoney(-1*user?.satcredit)}</div>
           </div>
           <div className={styles.section}>
             <div className={styles.stitle}>Recharge Day</div>
-            <div className={styles.info}>{user.satchargeday||"~"}</div>
+            <div className={styles.info}>{user?.satchargeday||"~"}</div>
           </div>
         </div>
         <div className={styles.section}>
@@ -62,11 +62,11 @@ export default function UserPage({userId}) {
         <div className={styles.section2}>
           <div className={styles.section}>
               <div className={styles.stitle}>Credit</div>
-              <div style={user.intcredit>0?{color:"red"}:{color:"green"}} className={styles.info}>{formatMoney(-1*user.intcredit)}</div>
+              <div style={user?.intcredit>0?{color:"red"}:{color:"green"}} className={styles.info}>{formatMoney(-1*user?.intcredit)}</div>
           </div>
           <div className={styles.section}>
               <div className={styles.stitle}>Recharge Day</div>
-              <div className={styles.info}>{user.intchargeday||"~"}</div>
+              <div className={styles.info}>{user?.intchargeday||"~"}</div>
           </div>
         </div>
     </div>

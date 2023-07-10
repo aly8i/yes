@@ -35,8 +35,8 @@ const Tablehead = ({setFilteredvalue,filteredvalue,searchedvalue,setSearchedvalu
                     <>
                         <div onClick={()=>{setFilteredvalue("")}} class="flex flex-col pb-1 pt-1 m-auto">all</div>
                         {
-                            boxes.map((option)=>(
-                                <div onClick={()=>{setFilteredvalue(option)}} class="flex flex-col pb-1 pt-1 m-auto">
+                            boxes.map((option,i)=>(
+                                <div key={i} onClick={()=>{setFilteredvalue(option)}} class="flex flex-col pb-1 pt-1 m-auto">
                                     {option}
                                 </div>
                             ))

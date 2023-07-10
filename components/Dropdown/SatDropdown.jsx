@@ -11,8 +11,8 @@ const SatDropdown = ({setSatbox,satbox}) => {
             <div class="cursor-pointer" onMouseEnter={()=>{setShowoptions(true)}} onMouseLeave={()=>{setShowoptions(false)}}>
                 <input  onChange={(e)=>{setSatbox(e.target.value)}} value={satbox} class="p-3 flex-1 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
                 {
-                    showptions&&boxes.filter((val)=>val.includes(satbox)).map((option)=>(
-                        <div onClick={()=>{setSatbox(option)}} class="pt-10 pb-10 flex-1 w-50 justify-center items-center  m-auto flex flex-col rounded-md bg-gray-600 hover:bg-gray-100 shadow-lg relative ring-2 ring-blue-500 ">
+                    showptions&&boxes.filter((val)=>val.includes(satbox)).map((option,i)=>(
+                        <div key={i} onClick={()=>{setSatbox(option)}} class="pt-10 pb-10 flex-1 w-50 justify-center items-center  m-auto flex flex-col rounded-md bg-gray-600 hover:bg-gray-100 shadow-lg relative ring-2 ring-blue-500 ">
                             {option}
                         </div>
                     ))

@@ -5,7 +5,7 @@ const nextConfig = {
     appDir: true,
   },
   env: {
-    BASE_URL: "https://yesnet.vercel.app",
+    BASE_URL: "http://localhost:3000",
     NEXTAUTH_SECRET: "codingwithabbas",
     FIREBASE_APIKEY: "AIzaSyCFofsxX5gGiTuYRs_l0cQX8c1wTu2Z7jE",
     FIREBASE_AUTHDOMAIN:"yesnet961.firebaseapp.com",

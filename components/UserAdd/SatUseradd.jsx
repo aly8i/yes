@@ -27,14 +27,14 @@ const Useradd = () => {
       const usersRef = collection(db,'users');
       const usersQuery = query(usersRef, where('phonenumber', '==', phonenumber));
       const querySnapshot = await getDocs(usersQuery);
-      var found={};
+      var found=null;
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const id = doc.id;
         const data = doc.data();
         found = { id, ...data };
       }
-      if(found!={}){
+      if(found!=null){
         const data = {
           satchargeamount: found?.satchargeamount?found?.satchargeamount:satchargeamount,
           satchargeday:found?.satchargeday?found?.satchargeday:satchargeday,
@@ -51,6 +51,7 @@ const Useradd = () => {
           phonenumber,
           password,
           satbox,
+          satcredit:0,
           satchargeday,
           satchargeamount,
           service:["satelite"],

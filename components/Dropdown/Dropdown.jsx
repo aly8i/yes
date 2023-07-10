@@ -11,8 +11,8 @@ const Dropdown = ({setIntbox,intbox}) => {
             <div class="cursor-pointer" onMouseEnter={()=>{setShowoptions(true)}} onMouseLeave={()=>{setShowoptions(false)}}>
                 <input  onChange={(e)=>{setBox(e.target.value)}} value={intbox} class="p-3 flex-1 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
                 {
-                    showptions&&boxes.filter((val)=>val.includes(intbox)).map((option)=>(
-                        <div onClick={()=>{setIntbox(option)}} class="pt-10 pb-10 flex-1 w-50 justify-center items-center  m-auto flex flex-col rounded-md bg-gray-600 hover:bg-gray-100 shadow-lg relative ring-2 ring-blue-500 ">
+                    showptions&&boxes.filter((val)=>val.includes(intbox)).map((option,i)=>(
+                        <div key={i} onClick={()=>{setIntbox(option)}} class="pt-10 pb-10 flex-1 w-50 justify-center items-center  m-auto flex flex-col rounded-md bg-gray-600 hover:bg-gray-100 shadow-lg relative ring-2 ring-blue-500 ">
                             {option}
                         </div>
                     ))

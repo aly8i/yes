@@ -19,8 +19,8 @@ const SatTableData = ({users,finishindex,startindex,selectUser,setDetailview}) =
               </tr>
             </thead>
             <tbody class="text-gray-100">
-            {users.slice(startindex,finishindex+1).map((user)=>(
-                  <tr onMouseEnter={()=>{setDetailview("userview");selectUser(user)}}>
+            {users.slice(startindex,finishindex+1).map((user,i)=>(
+                  <tr key={i} onMouseEnter={()=>{setDetailview("userview");selectUser(user)}}>
                     <td class="sm:p-3 py-2 px-1 border-b border-gray-800">
                       <div class="flex items-center">
                       <img src={`https://robohash.org/${user?.username}`} alt="profile" class="w-7 h-7 p-1.5 mr-2.5 rounded-lg border border-gray-800"/>

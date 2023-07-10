@@ -28,14 +28,14 @@ const Useradd = () => {
       const usersRef = collection(db,'users');
       const usersQuery = query(usersRef, where('phonenumber', '==', phonenumber));
       const querySnapshot = await getDocs(usersQuery);
-      var found={};
+      var found=null;
       if (!querySnapshot.empty) {
         const doc = querySnapshot.docs[0];
         const id = doc.id;
         const data = doc.data();
         found = { id, ...data };
       }
-      if(found!={}){
+      if(found!=null){
         const data = {
           intchargeamount: found?.intchargeamount?found?.intchargeamount:intchargeamount,
           intchargeday:found?.intchargeday?found?.intchargeday:intchargeday,

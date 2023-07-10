@@ -10,8 +10,8 @@ const WebDropdown = ({setIntweb,intweb}) => {
             <div class="cursor-pointer" onMouseEnter={()=>{setShowoptions(true)}} onMouseLeave={()=>{setShowoptions(false)}}>
                 <input  onChange={(e)=>{setIntweb(e.target.value)}} value={intweb} class="p-3 flex-1 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
                 {
-                    showptions&&websites.filter((val)=>val.name.includes(intweb)).map((option)=>(
-                        <div onClick={()=>{setIntweb(option.name)}} class="pt-10 pb-10 flex-1 w-50 justify-center items-center  m-auto flex flex-col rounded-md bg-gray-600 hover:bg-gray-100 shadow-lg relative ring-2 ring-blue-500 ">
+                    showptions&&websites.filter((val)=>val.name.includes(intweb)).map((option,i)=>(
+                        <div key={i} onClick={()=>{setIntweb(option.name)}} class="pt-10 pb-10 flex-1 w-50 justify-center items-center  m-auto flex flex-col rounded-md bg-gray-600 hover:bg-gray-100 shadow-lg relative ring-2 ring-blue-500 ">
                             {option.name}
                         </div>
                     ))
