@@ -36,9 +36,10 @@ const Useradd = () => {
       }
       if(found!={}){
         const data = {
-          satchargeamount,
-          satchargeday,
-          satbox,
+          satchargeamount: found?.satchargeamount?found?.satchargeamount:satchargeamount,
+          satchargeday:found?.satchargeday?found?.satchargeday:satchargeday,
+          satcredit: found?.satcredit?found?.satcredit:0,
+          satbox: found?.satbox?found?.satbox:satbox,
           service:["internet","satelite"],
           role:"client"
         }

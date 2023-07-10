@@ -37,10 +37,11 @@ const Useradd = () => {
       }
       if(found!={}){
         const data = {
-          intchargeamount,
-          intchargeday,
-          intbox,
-          intweb,
+          intchargeamount: found?.intchargeamount?found?.intchargeamount:intchargeamount,
+          intchargeday:found?.intchargeday?found?.intchargeday:intchargeday,
+          intbox: found?.intbox?found?.intbox:intbox,
+          intcredit: found?.intcredit>0?found?.intcredit:0,
+          intweb: found?.intweb?found?.intweb:intweb,
           service:["internet","satelite"],
           role:"client"
         }
@@ -51,6 +52,7 @@ const Useradd = () => {
           username,
           phonenumber,
           password,
+          intcredit: 0,
           intbox,
           intweb,
           intchargeday,
