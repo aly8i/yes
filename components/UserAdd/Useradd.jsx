@@ -17,10 +17,19 @@ const Useradd = () => {
   const [intchargeday,setIntchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])||1);
   const [intchargeamount,setIntchargeamount] = useState(process.env.INT_CHARGE||0);
   const [intweb,setIntweb] = useState("");
+  const boxes = JSON.parse(process.env.INT_BOXES_ARR || '[]');
+  const websites = JSON.parse(process.env.WEB_ARRAY || '[]');
   fetchUsers();
-
+  const checkWeb = async() =>{
+    websites.map((web)=>{
+      if(web.name==intweb)
+        return true;
+    })
+    return false;
+  }
   async function addUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""|| intchargeamount==0||intweb==""){
+    const webvalid = await checkWeb();
+    if(username==""||phonenumber==""||password==""||intbox==""|| intchargeamount==0||intweb==""||!boxes.includes(intbox)||!webvalid){
       toast.warning("Please fill out all the details");
       return
     }
@@ -118,8 +127,8 @@ const Useradd = () => {
           <input type="number"  onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
-      <Dropdown intbox={intbox} setIntbox={setIntbox}/>
-      <WebDropdown intweb={intweb} setIntweb={setIntweb}/>
+      <Dropdown boxes={boxes} intbox={intbox} setIntbox={setIntbox}/>
+      <WebDropdown websites={websites} intweb={intweb} setIntweb={setIntweb}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await addUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save

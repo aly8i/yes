@@ -14,7 +14,7 @@ const SatUseredit = () => {
   const [satbox,setSatbox] = useState(user?.satbox);
   const [satchargeday,setSatchargeday] = useState(user?.satchargeday||0);
   const [satchargeamount,setSatchargeamount] = useState(user?.satchargeamount||0);
-
+  const boxes = JSON.parse(process.env.SAT_BOXES_ARR || '[]');
   async function updateUser() {
     if(username==""||phonenumber==""||password==""||satbox==""||satchargeday==""||satchargeamount==0){
         toast.warning("Please fill out all the details");
@@ -109,7 +109,7 @@ const SatUseredit = () => {
           <input onChange={(e)=>{setSatchargeamount(e.target.value)}} value={satchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
-      <SatDropdown setSatbox={setSatbox} satbox={satbox}/>
+      <SatDropdown boxes={boxes} setSatbox={setSatbox} satbox={satbox}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await updateUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save

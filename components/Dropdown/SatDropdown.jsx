@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 
-const SatDropdown = ({setSatbox,satbox}) => {
+const SatDropdown = ({boxes,setSatbox,satbox}) => {
   const [showptions,setShowoptions]=useState(false);
-  const boxes = JSON.parse(process.env.SAT_BOXES_ARR || '[]');
   
   return (
     <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">

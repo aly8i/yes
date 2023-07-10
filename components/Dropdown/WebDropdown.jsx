@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
-const WebDropdown = ({setIntweb,intweb}) => {
+const WebDropdown = ({websites,setIntweb,intweb}) => {
   const [showptions,setShowoptions]=useState(false);
-  const websites = JSON.parse(process.env.WEB_ARRAY || '[]');
+  
   return (
     <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3 flex flex-col">

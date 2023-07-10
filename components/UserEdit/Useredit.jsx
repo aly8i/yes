@@ -16,9 +16,18 @@ const Useredit = () => {
   const [intchargeday,setIntchargeday] = useState(user?.intchargeday);
   const [intweb,setIntweb] = useState(user?.intweb);
   const [intchargeamount,setIntchargeamount] = useState(user?.intchargeamount||0);
-
+  const boxes = JSON.parse(process.env.INT_BOXES_ARR || '[]');
+  const websites = JSON.parse(process.env.WEB_ARRAY || '[]');
+  const checkWeb = async() =>{
+    websites.map((web)=>{
+      if(web.name==intweb)
+        return true;
+    })
+    return false;
+  }
   async function updateUser() {
-    if(username==""||phonenumber==""||password==""||intbox==""||intchargeday==""||intchargeamount==0||intweb==""){
+    const webvalid = await checkWeb();
+    if(username==""||phonenumber==""||password==""||intbox==""||intchargeday==""||intchargeamount==0||intweb==""||!boxes.includes(intbox)||!webvalid){
         toast.warning("Please fill out all the details");
         return
       }
@@ -112,7 +121,7 @@ const Useredit = () => {
           <input type="number" onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
-      <Dropdown setIntbox={setIntbox} intbox={intbox}/>
+      <Dropdown boxes={boxes} setIntbox={setIntbox} intbox={intbox}/>
       <WebDropdown setIntweb={setIntweb} intweb={intweb}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await updateUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
