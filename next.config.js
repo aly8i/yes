@@ -20,7 +20,8 @@ const nextConfig = {
     CRON_KEY: 'Bearer cron-job-auth-token-123-poi',
     SAT_CHARGE: 100,
     INT_CHARGE:100,
-    WEB_ARRAY:'[{"name": "connect", "value": "https://isp-conect.net:34529/login/?next=/"},{"name": "global", "value": "https://th.thglobalvision.net/login.php"},{"name": "patrick", "value": "https://misp.cloud/login/?next=/"},{"name": "sama", "value": "https://mb.samalb.net/login.php"},{"name": "same conect", "value": "http://10.10.10.101/login/?next=/"}]'
+    WEB_ARRAY_2:'[{"name": "connect", "value": "https://isp-conect.net:34529/login/?next=/"},{"name": "global", "value": "https://th.thglobalvision.net/login.php"},{"name": "patrick", "value": "https://misp.cloud/login/?next=/"},{"name": "sama", "value": "https://mb.samalb.net/login.php"},{"name": "same conect", "value": "http://10.10.10.101/login/?next=/"}]',
+    WEB_ARRAY:'[{"name": "connect", "value": "http://127.0.0.1:5000/connect"},{"name": "global", "value": "http://127.0.0.1:5000/global"},{"name": "misp", "value": "http://127.0.0.1:5000/misp"},{"name": "sama", "value": "http://127.0.0.1:5000/sama"},{"name": "same connect", "value": "http://127.0.0.1:5000/sameconnect"}]'
   },
 };
 

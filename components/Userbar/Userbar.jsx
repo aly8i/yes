@@ -13,7 +13,7 @@ const Userbar = () => {
     const websites = JSON.parse(process.env.WEB_ARRAY);
     for (let i = 0; i < websites.length; i++) {
       if (websites[i].name === user?.intweb) {
-        return websites[i].value;
+        return `${websites[i].value}?phonenumber=${user.phonenumber}`;
       }
     }
     return null; // Return null if no matching value is found
