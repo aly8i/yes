@@ -1,11 +1,11 @@
-import TableData from './TableData'
-import Tablehead from './Tablehead'
-import Tablenav from "./Tablenav"
+import CollTableData from './CollTableData'
+import CollTablehead from './CollTablehead'
+import CollTablenav from "./CollTablenav"
 import React, { useState,useContext,useEffect,useRef } from 'react'
 import { UserContext } from '../../context/Usercontext';
-import {fetchUsers} from '../../hooks/FirebaseHook';
-import Collectors from './Collectors';
-const Table = () => {
+import {fetchCollUsers} from '../../hooks/FirebaseHook';
+
+const CollTable = () => {
     const [page, setpage] = useState(1);
     const [users,setUsers] = useState([]);
     const { selectUser,setDetailview,initialusers } = useContext(UserContext);
@@ -16,8 +16,9 @@ const Table = () => {
     const [searchedvalue, setSearchedvalue] = useState("");
     const [filteredvalue, setFilteredvalue] = useState("");
     const [tableview,setTableview] = useState("user");
+    const [type,setType] = useState("internet")
     const pagestotal = useRef(0);
-    fetchUsers();
+    fetchCollUsers();
   
     useEffect(() => {
         const calculateUsersPerPage = () => {
@@ -31,11 +32,10 @@ const Table = () => {
           window.removeEventListener('resize', calculateUsersPerPage);
         };
       }, []);
-
       useEffect(()=>{
-        const temp = initialusers.filter((usr)=>usr.username?.includes(searchedvalue)&&usr.intbox?.includes(filteredvalue));
+        const temp = initialusers.filter((usr)=>usr.username?.includes(searchedvalue)&&(usr.satbox?.includes(filteredvalue)||usr.intbox?.includes(filteredvalue))&&usr?.service?.includes(type));
         setUsers(temp);
-      },[searchedvalue,initialusers,filteredvalue]);
+      },[searchedvalue,initialusers,filteredvalue,type]);
 
     useEffect(()=>{
         if(usersPerPageFix>users.length){
@@ -79,7 +79,7 @@ const Table = () => {
             if(page==numofpages){
               setFinishindex(finishindex-(users.length%usersPerPageFix));
             }else{
-                setFinishindex(finishindex-usersPerPageFix);
+              setFinishindex(finishindex-usersPerPageFix);
             } 
           }
         }
@@ -88,32 +88,15 @@ const Table = () => {
 
   return (
     <>
-        <div class="w-full sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col flex-grow border-b bg-gray-900 text-gray-400 border-gray-100 sticky top-0">
-          <Tablenav tableview={tableview} setTableview={setTableview}/>
-        </div>
-        { 
-          tableview=="user"&&
-          <div class="sm:p-7 p-4 overflow-hidden">
-            <Tablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/>
-            <TableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} />
-          </div>
-        }
-        { 
-          tableview=="collector"&&
-          <div class="sm:p-7 p-4 overflow-hidden">
-            <Collectors typee="internet"/>
-          </div>
-        }
-        { 
-          tableview=="onhold"&&
-          <div class="sm:p-7 p-4 overflow-hidden">
-            {/* <Tablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/> */}
-            {/* <TableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} /> */}
-          </div>
-        }
-  
+      <div class="w-full sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col flex-grow border-b bg-gray-900 text-gray-400 border-gray-100 sticky top-0">
+        <CollTablenav tableview={tableview} setTableview={setTableview}/>
+      </div>
+      <div class="sm:p-7 p-4 overflow-hidden">
+        <CollTablehead type={type} setType={setType} filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/>
+        <CollTableData type={type} users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} />
+      </div>
     </>
   )
 }
 
-export default Table
+export default CollTable

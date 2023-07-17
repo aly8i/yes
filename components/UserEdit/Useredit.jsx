@@ -123,7 +123,7 @@ const Useredit = () => {
         </div>
       </div>
       <Dropdown boxes={boxes} setIntbox={setIntbox} intbox={intbox}/>
-      <WebDropdown setIntweb={setIntweb} intweb={intweb}/>
+      <WebDropdown websites={websites} setIntweb={setIntweb} intweb={intweb}/>
       <div class="flex flex-row w-50 pr-2 pl-2 m-auto mt-5 align-middle items-center">
         <div style={{borderRadius:"1.125rem"}} onClick={async()=>await updateUser()} class={`cursor-pointer w-full text-center shadow p-2 border border-gray-700`}>
             Save

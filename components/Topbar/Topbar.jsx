@@ -11,6 +11,7 @@ const Topbar = () => {
         <a href="#" class="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-0"><Image src="/yeslogo.png" width={120} height={50}></Image></a>
         <a href="/internet" class="cursor-pointer h-full border-b-2 text-gray-400 border-white inline-flex mr-8 items-center">Internet</a>
         <a href="/satelite" class="cursor-pointer h-full border-b-2 text-gray-400 border-white inline-flex mr-8 items-center">Satelite</a>
+        <a href="/collector" class="cursor-pointer h-full border-b-2 text-gray-400 border-white inline-flex mr-8 items-center">Collector</a>
         <a href="#" class="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-8">Services</a>
         <a href="#" class="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center mr-8">Contact</a>
         <a href="#" class="cursor-pointer h-full border-b-2 border-transparent inline-flex items-center">About Us</a>

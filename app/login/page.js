@@ -25,6 +25,8 @@ const Login = () => {
         window.location.href=`${process.env.BASE_URL}/satelite`
       }else if(data?.session?.user?.role=="client"){
         window.location.href=`${process.env.BASE_URL}/user/${data?.session?.user?.id}`
+      }else if(data?.session?.user?.role=="collector"){
+        window.location.href=`${process.env.BASE_URL}/collector`
       }
     }
   },[data?.session?.user?.role])

@@ -18,6 +18,7 @@ const nextConfig = {
     SAT_BOXES_ARR: '["hfc", "baraket", "melhem"]',
     INT_BOXES_ARR: '["hfc", "nejem", "farah"]',
     CRON_KEY: 'Bearer cron-job-auth-token-123-poi',
+    ADMIN_KEY: '123121',
     SAT_CHARGE: 100,
     INT_CHARGE:100,
     WEB_ARRAY_2:'[{"name": "connect", "value": "https://isp-conect.net:34529/login/?next=/"},{"name": "global", "value": "https://th.thglobalvision.net/login.php"},{"name": "patrick", "value": "https://misp.cloud/login/?next=/"},{"name": "sama", "value": "https://mb.samalb.net/login.php"},{"name": "same conect", "value": "http://10.10.10.101/login/?next=/"}]',

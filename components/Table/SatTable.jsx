@@ -4,7 +4,7 @@ import Tablenav from "./Tablenav"
 import React, { useState,useContext,useEffect,useRef } from 'react'
 import { UserContext } from '../../context/Usercontext';
 import {fetchSatUsers} from '../../hooks/FirebaseHook';
-
+import Collectors from './Collectors';
 const Table = () => {
     const [page, setpage] = useState(1);
     const [users,setUsers] = useState([]);
@@ -15,6 +15,7 @@ const Table = () => {
     const [finishindex, setFinishindex] = useState(0);
     const [searchedvalue, setSearchedvalue] = useState("");
     const [filteredvalue, setFilteredvalue] = useState("");
+    const [tableview,setTableviw] = useState("user");
     const pagestotal = useRef(0);
     fetchSatUsers();
   
@@ -89,12 +90,28 @@ const Table = () => {
   return (
     <>
         <div class="w-full sm:px-7 sm:pt-7 px-4 pt-4 flex flex-col flex-grow border-b bg-gray-900 text-gray-400 border-gray-100 sticky top-0">
-            <Tablenav/>
+          <Tablenav tableview={tableview} setTableview={setTableviw}/>
         </div>
-        <div class="sm:p-7 p-4 overflow-hidden">
-            <SatTablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/>
-            <SatTableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} />
-        </div>
+        { 
+          tableview=="user"&&
+            <div class="sm:p-7 p-4 overflow-hidden">
+                <SatTablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/>
+                <SatTableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} />
+            </div>
+        }
+        { 
+          tableview=="collector"&&
+          <div class="sm:p-7 p-4 overflow-hidden">
+            <Collectors typee="satelite"/>
+          </div>
+        }
+        { 
+          tableview=="onhold"&&
+          <div class="sm:p-7 p-4 overflow-hidden">
+            {/* <Tablehead filteredvalue={filteredvalue} setFilteredvalue={setFilteredvalue} searchedvalue={searchedvalue} setSearchedvalue={setSearchedvalue} pagestotal={pagestotal.current} page={page} togglePage={togglePage}/> */}
+            {/* <TableData users={users} selectUser={selectUser} setDetailview={setDetailview} finishindex={finishindex} startindex={startindex} /> */}
+          </div>
+        }
     </>
   )
 }
