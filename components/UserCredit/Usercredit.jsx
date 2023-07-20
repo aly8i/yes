@@ -2,23 +2,24 @@ import React, { useContext, useState } from 'react'
 import "./Usercredit.module.scss"
 import { UserContext } from '../../context/Usercontext'
 import {db} from "../../Firebase";
-import { collection,doc,updateDoc,increment} from 'firebase/firestore';
+import { collection,doc,updateDoc,increment,getDoc} from 'firebase/firestore';
 import { toast } from 'react-toastify';
+import { formatDate } from '../../utils/functions';
+import { PDFDocument, StandardFonts,PDFImage,rgb  } from 'pdf-lib';
+import axios from 'axios';
 
 const Useredit = () => {
   const {user,setDetailview} = useContext(UserContext);
   const [buttonoptions,setButtonoptions] = useState(false);
   const [transactiontype,setTransactiontype] = useState("charge");
   const [amount,setAmount] = useState(0);
-  
+  const usersRef = collection(db,'users');
   async function startTransaction() {
     if(amount==0){
       toast.warning("Please enter the amount");
       return
     }
     try {
-    
-      const usersRef = collection(db,'users');
       const docRef = doc(usersRef, `${user?.id}`);
       var amt = amount;
       if(transactiontype=="recieve"){
@@ -36,12 +37,120 @@ const Useredit = () => {
         lastseen: dateObj
       }
       await updateDoc(docRef, data);
+      await renderPDF(dateObj)
       setAmount(0);
       toast.success("User charged successfully")
     } catch (error) {
       toast.error("Error charging the user");
     }
   }
+
+
+
+  const renderPDF = async (date) => {
+    try {
+      const docRef = doc(usersRef, `${user?.id}`);
+      const userDoc = await getDoc(docRef);
+  
+      if (userDoc.exists()) {
+        const user = userDoc.data();
+        const x1 = user.username || '';
+        const x2 = user.phonenumber || '';
+        const x3 = amount || '';
+        const x4 = formatDate(date) || '';
+  
+        const pageWidth = 595; 
+        const pageHeight = 842; 
+  
+        const pdfDoc = await PDFDocument.create();
+        const page = pdfDoc.addPage([pageWidth, pageHeight/2]); 
+  
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const fontSize = 10;
+        const rowHeight = 30;
+        const margin = 50;
+        const tableWidth = page.getWidth() - 2 * margin;
+  
+        const logoURL = '/yeslogo.png';
+        const logoImageBytes = await fetch(logoURL).then((res) => res.arrayBuffer());
+        const logoImage = await pdfDoc.embedPng(logoImageBytes);
+  
+        page.drawImage(logoImage, {
+          x: 50,
+          y: 300,
+          width: 180,
+          height: 120,
+        });
+  
+        const tableX = margin;
+        let tableY = page.getHeight() - margin - rowHeight - 80;
+        const backgroundColors = [rgb(1, 1, 1), rgb(0.55, 0.8, 1)];
+        let currentBackgroundColorIndex = 0;
+  
+        const drawRow = (label, value) => {
+          page.drawRectangle({
+            x: tableX,
+            y: tableY,
+            width: tableWidth,
+            height: rowHeight,
+            color: backgroundColors[currentBackgroundColorIndex],
+          });
+  
+          page.drawText(label, {
+            x: tableX + 10,
+            y: tableY + rowHeight / 2 - 7,
+            font,
+            fontSize,
+          });
+  
+          page.drawText(value, {
+            x: tableX + 200,
+            y: tableY + rowHeight / 2 - 7,
+            font,
+            fontSize,
+          });
+  
+          tableY -= rowHeight;
+          currentBackgroundColorIndex = (currentBackgroundColorIndex + 1) % 2;
+        };
+  
+        drawRow('Username', `    ${x1}`);
+        drawRow('Phone Number', `    ${x2}`);
+        drawRow('Service', '    internet');
+        drawRow('Amount', `    ${x3} $`);
+        drawRow('Date', `    ${x4}`);
+  
+        const pdfBytes = await pdfDoc.save();
+        const filename = `internet-invoice-${x1}-${x4}.pdf`;
+        savePDFFile(pdfBytes, filename);
+        axios.post(`${process.env.AUTOMATION_SERVER}/invoice`,{phonenumber:`${x2}`}).catch((err)=>{
+          toast.warning("Automation serivce isn't enabled");
+        });
+      } else {
+        console.log('User not found');
+      }
+    } catch (error) {
+      console.log('Error fetching user:', error);
+    }
+  };
+  
+  
+  const savePDFFile = (buffer, fileName) => {
+    const data = new Blob([buffer], { type: 'application/pdf' });
+  
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(data, fileName);
+    } else {
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 100);
+    }
+  };
   
 
   return (

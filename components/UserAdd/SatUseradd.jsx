@@ -14,7 +14,7 @@ const Useradd = () => {
   const [password,setPassword] = useState("");
   const [satbox,setSatbox] = useState("");
   const [satchargeamount,setSatchargeamount] = useState(process.env.SAT_CHARGE||0);
-  const [satchargeday,setSatchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])||1);
+  const [satchargeday,setSatchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])>28?28:parseInt(new Date().toISOString().split('T')[0].split("-")[2]));
   const boxes = JSON.parse(process.env.SAT_BOXES_ARR || '[]');
   fetchSatUsers();
 
@@ -112,7 +112,7 @@ const Useradd = () => {
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Charge Amount</div>
-          <input  type="number" onChange={(e)=>{setSatchargeamount(e.target.value)}} value={satchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+          <input  min="0" type="number" onChange={(e)=>{setSatchargeamount(e.target.value)}} value={satchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <SatDropdown boxes={boxes} satbox={satbox} setSatbox={setSatbox}/>

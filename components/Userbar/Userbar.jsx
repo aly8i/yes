@@ -4,27 +4,148 @@ import {db} from "../../Firebase";
 import { collection,doc,deleteDoc,getDoc,updateDoc,deleteField } from 'firebase/firestore';
 import { UserContext } from '../../context/Usercontext'
 import { formatDate,formatMoney } from '../../utils/functions'
+import { PDFDocument, StandardFonts,PDFImage,rgb  } from 'pdf-lib';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 const Userbar = () => {
   const {user,setDetailview} = useContext(UserContext);
   const [buttonoptions,setButtonoptions] = useState(false);
+  const usersRef = collection(db,'users');
 
-  const getLink = () => {
-    const websites = JSON.parse(process.env.WEB_ARRAY);
-    for (let i = 0; i < websites.length; i++) {
-      if (websites[i].name === user?.intweb) {
-        return `${websites[i].value}?phonenumber=${user.phonenumber}`;
-      }
+  // const getLink = () => {
+  //   const websites = JSON.parse(process.env.WEB_ARRAY);
+  //   for (let i = 0; i < websites.length; i++) {
+  //     if (websites[i].name === user?.intweb) {
+  //       return `${websites[i].value}?phonenumber=${user.phonenumber}`;
+  //     }
+  //   }
+  //   return null;
+  // };
+
+  // const weblink = getLink();
+  
+  const navigateToUser = () => {
+    const webNoSpace = user?.intweb.replace(/\s/g, "");
+    axios.post(`${process.env.AUTOMATION_SERVER}/${webNoSpace}`,{phonenumber:`${user?.phonenumber}`}).catch((err)=>{
+      toast.warning("Automation serivce isn't enabled");
+    });
+  }
+
+  const savePDFFile = (buffer, fileName) => {
+    const data = new Blob([buffer], { type: 'application/pdf' });
+  
+    if (typeof window.navigator.msSaveBlob !== 'undefined') {
+      window.navigator.msSaveBlob(data, fileName);
+    } else {
+      const url = window.URL.createObjectURL(data);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = fileName;
+      link.click();
+      setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+      }, 100);
     }
-    return null; // Return null if no matching value is found
+  };
+  
+
+  const renderPDF = async () => {
+    const currentDate = new Date();
+    const dateObj = {
+      day: currentDate.getDate(),
+      month: currentDate.getMonth() + 1,
+      year: currentDate.getFullYear()
+    }
+
+    try {
+      const docRef = doc(usersRef, `${user?.id}`);
+      const userDoc = await getDoc(docRef);
+  
+      if (userDoc.exists()) {
+        const user = userDoc.data();
+        const x1 = user.username || '';
+        const x2 = user.phonenumber || '';
+        const x3 = user.intcredit || '';
+        const x4 = formatDate(dateObj) || '';
+  
+        const pageWidth = 595; 
+        const pageHeight = 842; 
+  
+        const pdfDoc = await PDFDocument.create();
+        const page = pdfDoc.addPage([pageWidth, pageHeight/2]); 
+  
+        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+        const fontSize = 10;
+        const rowHeight = 30;
+        const margin = 50;
+        const tableWidth = page.getWidth() - 2 * margin;
+  
+        const logoURL = '/yeslogo.png';
+        const logoImageBytes = await fetch(logoURL).then((res) => res.arrayBuffer());
+        const logoImage = await pdfDoc.embedPng(logoImageBytes);
+  
+        page.drawImage(logoImage, {
+          x: 50,
+          y: 300,
+          width: 180,
+          height: 120,
+        });
+  
+        const tableX = margin;
+        let tableY = page.getHeight() - margin - rowHeight - 80;
+        const backgroundColors = [rgb(1, 1, 1), rgb(0.55, 0.8, 1)];
+        let currentBackgroundColorIndex = 0;
+  
+        const drawRow = (label, value) => {
+          page.drawRectangle({
+            x: tableX,
+            y: tableY,
+            width: tableWidth,
+            height: rowHeight,
+            color: backgroundColors[currentBackgroundColorIndex],
+          });
+  
+          page.drawText(label, {
+            x: tableX + 10,
+            y: tableY + rowHeight / 2 - 7,
+            font,
+            fontSize,
+          });
+  
+          page.drawText(value, {
+            x: tableX + 200,
+            y: tableY + rowHeight / 2 - 7,
+            font,
+            fontSize,
+          });
+  
+          tableY -= rowHeight;
+          currentBackgroundColorIndex = (currentBackgroundColorIndex + 1) % 2;
+        };
+  
+        drawRow('Username', `    ${x1}`);
+        drawRow('Phone Number', `    ${x2}`);
+        drawRow('Service', '    internet');
+        drawRow('Debit', `    ${x3} $`);
+        drawRow('Date', `    ${x4}`);
+  
+        const pdfBytes = await pdfDoc.save();
+        const filename = `internet-Debit-${x1}-${x4}.pdf`;
+        savePDFFile(pdfBytes, filename);
+        axios.post(`${process.env.AUTOMATION_SERVER}/invoice`,{phonenumber:`${x2}`}).catch((err)=>{
+          toast.warning("Automation serivce isn't enabled");
+        });
+      } else {
+        console.log('User not found');
+      }
+    } catch (error) {
+      console.log('Error fetching user:', error);
+    }
   };
 
-  const weblink = getLink();
-  
-  
   async function deleteUser() {
     try {
-      const usersRef = collection(db,'users');
+     
       const docRef = doc(usersRef,`${user?.id}`);
       const userSnap = await getDoc(docRef);
       var userr;
@@ -63,6 +184,7 @@ const Userbar = () => {
         <div onMouseLeave={()=>setButtonoptions(false)}class="text-center cursor-pointer shadow text-gray-400 message parker border border-gray-700">
           <div onClick={()=>setDetailview("useredit")} class="option edit border-b border-gray-700 ml-auto">edit</div>
           <div onClick={()=>setDetailview("useradd")} class="option add border-b border-gray-700 ml-auto">add</div>
+          <div onClick={()=>renderPDF()} class="option add border-b border-gray-700 ml-auto">notify</div>
           <div onClick={async()=>await deleteUser()} class="option delete border-b border-gray-700 ml-auto">delete</div>
           <div onClick={async()=>setDetailview("usercredit")} class="option delete ml-auto">credit</div>
         </div>
@@ -99,7 +221,7 @@ const Userbar = () => {
       <div class="sm:flex hidden w-full items-center justif-center ml-auto">
         <div class="text-center s3">
             <div class="text-xs text-gray-400">Website</div>
-            <div class=" text-lg text-gray-400"><a href={`${weblink}`} target="_blank">{user?.intweb?user.intweb:"~"}</a></div>
+            <div onClick={()=>navigateToUser()} class=" text-lg  text-blue-500  hover:text-violet-800 cursor-pointer">{user?.intweb?user.intweb:"~"}</div>
         </div>
       </div>
       <div class="sm:flex hidden w-full items-center justif-center ml-auto">

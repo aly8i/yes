@@ -100,13 +100,13 @@ const SatUseredit = () => {
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Day of Charge</div>
-          <input type="number" onChange={(e)=>{setSatchargeday(e.target.value)}} value={satchargeday} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+          <input type="number" min="1" max="28" onChange={(e)=>{setSatchargeday(e.target.value)}} value={satchargeday} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Charge Amount</div>
-          <input onChange={(e)=>{setSatchargeamount(e.target.value)}} value={satchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+          <input min="0" onChange={(e)=>{setSatchargeamount(e.target.value)}} value={satchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <SatDropdown boxes={boxes} setSatbox={setSatbox} satbox={satbox}/>

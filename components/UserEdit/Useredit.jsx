@@ -28,7 +28,7 @@ const Useredit = () => {
   }
   async function updateUser() {
     const webvalid = await checkWeb();
-    if(username==""||phonenumber==""||password==""||intbox==""||intchargeday==""||intchargeamount==0||intweb==""||!boxes.includes(intbox)||!webvalid){
+    if(username==""||phonenumber==""||password==""||intbox==""||intchargeday==""||intweb==""||!boxes.includes(intbox)||!webvalid){
         toast.warning("Please fill out all the details");
         return
       }
@@ -113,13 +113,13 @@ const Useredit = () => {
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Day of Charge</div>
-          <input onChange={(e)=>{setIntchargeday(e.target.value)}} value={intchargeday} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+          <input min="1" max="28" onChange={(e)=>{setIntchargeday(e.target.value)}} value={intchargeday} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Charge Amount</div>
-          <input type="number" onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+          <input type="number" min="0" onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <Dropdown boxes={boxes} setIntbox={setIntbox} intbox={intbox}/>

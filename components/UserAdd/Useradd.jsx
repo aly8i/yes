@@ -14,7 +14,7 @@ const Useradd = () => {
   const [phonenumber,setPhonenumber] = useState("");
   const [password,setPassword] = useState("");
   const [intbox,setIntbox] = useState("");
-  const [intchargeday,setIntchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])||1);
+  const [intchargeday,setIntchargeday] = useState(parseInt(new Date().toISOString().split('T')[0].split("-")[2])>28?28:parseInt(new Date().toISOString().split('T')[0].split("-")[2]));
   const [intchargeamount,setIntchargeamount] = useState(process.env.INT_CHARGE||0);
   const [intweb,setIntweb] = useState("");
   const boxes = JSON.parse(process.env.INT_BOXES_ARR || '[]');
@@ -31,7 +31,7 @@ const Useradd = () => {
   }
   async function addUser() {
     const webvalid = await checkWeb();
-    if(username==""||phonenumber==""||password==""||intbox==""|| intchargeamount==0||intweb==""||!boxes.includes(intbox)||!webvalid){
+    if(username==""||phonenumber==""||password==""||intbox==""|| intweb==""||!boxes.includes(intbox)||!webvalid){
       toast.warning("Please fill out all the details");
       return
     }
@@ -126,7 +126,7 @@ const Useradd = () => {
       <div class="sm:flex hidden m-20 w-full pt-16 items-center justif-center ml-auto">
         <div class="text-center s3">
           <div class="text-xs text-gray-400">Charge Amount</div>
-          <input type="number"  onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
+          <input type="number"  min="0" onChange={(e)=>{setIntchargeamount(e.target.value)}} value={intchargeamount} class="p-3 flex-1  m-20 m-auto flex flex-col rounded-md bg-gray-800 shadow-lg relative ring-2 ring-blue-500 focus:outline-none"/>
         </div>
       </div>
       <Dropdown boxes={boxes} intbox={intbox} setIntbox={setIntbox}/>
