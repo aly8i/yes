@@ -37,7 +37,8 @@ const Useredit = () => {
         lastseen: dateObj
       }
       await updateDoc(docRef, data);
-      await renderPDF(dateObj)
+      if(transactiontype=="recieve")
+        await renderPDF(dateObj)
       setAmount(0);
       toast.success("User charged successfully")
     } catch (error) {
