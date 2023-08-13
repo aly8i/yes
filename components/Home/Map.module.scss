@@ -1,0 +1,46 @@
+
+.mapWrapper{
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 70%;
+    height: 350px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    min-height: 350px;
+    min-width: 500px;
+}
+.mapContainer {
+    top:0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    scale: 1.4;
+    position: absolute;
+    border-radius: 20px;
+    padding: 0;
+}
+
+
+  @media screen and (max-height: 680px) {
+    .mapContainer {
+        scale: 1.1 !important;
+        top:0;
+        right:0;
+    }
+    .wrapper {
+        scale:1.1 !important;
+    }
+    .mapWrapper{
+        scale:1.1 !important;
+        padding: 20px 10px 10px 48px;
+    }
+    .marker{
+        top:40%;
+        left: 45%;
+        transform: translate(-60%, -55%);
+    }
+  }
+ 
